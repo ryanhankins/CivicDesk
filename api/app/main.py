@@ -16,7 +16,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
-from . import agendas, auth, users
+from . import agendas, auth, backup, users
 from .db import open_pool, pool
 
 
@@ -33,6 +33,7 @@ app = FastAPI(title="CivicDesk API", lifespan=lifespan)
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(agendas.router)
+app.include_router(backup.router)
 
 
 @app.get("/api/health")

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ROLE_LABELS, state, api, showAgendaList } from './state.js';
+import { ROLE_LABELS, state, api, showAgendaList, refreshBackupBanner, downloadBackupArchive } from './state.js';
 import { loadUsers } from './users.js';
 import { loadAgendas } from './agendas-list.js';
 import { openAgenda } from './agenda-detail.js';
@@ -128,6 +128,8 @@ async function routeFromHash(isAdmin, isStaff, isCouncil) {
     if (isStaff) {
       document.getElementById('menu-staff').hidden = false;
       api('/api/agendas/backlog').then(updateBacklogNavBadge).catch(() => {});
+      refreshBackupBanner();
+      document.getElementById('backup-banner-download-btn')?.addEventListener('click', downloadBackupArchive);
     }
     if (isCouncil) document.getElementById('menu-council').hidden = false;
     await routeFromHash(isAdmin, isStaff, isCouncil);
