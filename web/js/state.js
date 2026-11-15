@@ -261,6 +261,10 @@ export function wireRestoreForm(formId, fileId, msgId, onRestored) {
         brandLogo.hidden = false;
         brandLogo.src = `/api/agendas/preferences/logo?t=${Date.now()}`;
       }
+      fetch('/api/agendas/preferences/branding')
+        .then(r => r.ok ? r.json() : null)
+        .then(b => { if (b) applyBrandTitle(b.city_title || ''); })
+        .catch(() => {});
       showToast('Archive restored', 'ok');
       await refreshBackupBanner();
       if (onRestored) await onRestored();
@@ -269,4 +273,14 @@ export function wireRestoreForm(formId, fileId, msgId, onRestored) {
       msgEl.textContent = err.message;
     }
   });
+}
+
+export function applyBrandTitle(cityTitle) {
+  const title = (cityTitle || '').trim();
+  const el = document.getElementById('brand-city-title');
+  if (el) {
+    el.textContent = title;
+    el.hidden = !title;
+  }
+  document.title = title ? `${title} - CivicDesk` : 'CivicDesk';
 }
