@@ -816,7 +816,7 @@ def create_permit(
             "VALUES (%s, 'Submitted', %s, %s)",
             (permit_id, user["username"], f"{t_row[1]} — {u_row[1]}"),
         )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.get("/{permit_id}")
@@ -825,7 +825,7 @@ def get_permit(
     user: dict = Depends(require_permission("permits.submit", "permits.manage")),
 ):
     with pool.connection() as conn:
-        permit = _get_permit_or_404(conn, permit_id)
+        permit = _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
     _check_permit_access(permit, user)
     return permit
 
@@ -877,7 +877,7 @@ async def upload_permit_document(
             "VALUES (%s, 'Document Uploaded', %s, %s)",
             (permit_id, user["username"], f"{clean_cat}: {orig_name}"),
         )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.get("/{permit_id}/documents/{doc_id}/download")
@@ -929,7 +929,7 @@ def delete_permit_document(
         if not row:
             raise HTTPException(status_code=404, detail="Document not found")
         _remove_minio_objects([row[0]])
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.get("/{permit_id}/pdf")
@@ -1058,7 +1058,7 @@ def update_permit(
                     (body.review_notes or "").strip(),
                 ),
             )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 # ------------------------------------------------------------------ workflow steps
@@ -1085,7 +1085,7 @@ def add_workflow_step(
             "VALUES (%s, 'Workflow Step Added', %s, %s)",
             (permit_id, user["username"], body.step_name.strip()),
         )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.patch("/{permit_id}/workflow/{step_id}")
@@ -1124,7 +1124,7 @@ def update_workflow_step(
             "VALUES (%s, 'Workflow Updated', %s, %s)",
             (permit_id, user["username"], f"{row[0]} -> {row[1]}"),
         )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.delete("/{permit_id}/workflow/{step_id}")
@@ -1135,7 +1135,7 @@ def delete_workflow_step(
 ):
     with pool.connection() as conn:
         conn.execute("DELETE FROM permit_workflow_steps WHERE id = %s AND permit_id = %s", (step_id, permit_id))
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 # ------------------------------------------------------------------ inspections
@@ -1211,7 +1211,7 @@ def update_inspection(
             "VALUES (%s, 'Inspection Updated', %s, %s)",
             (permit_id, user["username"], f"{row[0]} -> {row[1]}"),
         )
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 @router.delete("/{permit_id}/inspections/{insp_id}")
@@ -1222,7 +1222,7 @@ def delete_inspection(
 ):
     with pool.connection() as conn:
         conn.execute("DELETE FROM permit_inspections WHERE id = %s AND permit_id = %s", (insp_id, permit_id))
-        return _get_permit_or_404(conn, permit_id)
+        return _get_permit_or_404(conn, permit_id, include_internal=has_permission(user, "permits.manage"))
 
 
 # ------------------------------------------------------------------ messages
