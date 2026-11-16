@@ -19,6 +19,7 @@ export const ROLE_LABELS = {
   council_member: 'Council Member',
   admin_staff: 'Administrative Staff',
   non_admin_staff: 'Non-Administrative Staff',
+  applicant: 'Applicant / Citizen',
   read_only: 'Read-Only',
 };
 
