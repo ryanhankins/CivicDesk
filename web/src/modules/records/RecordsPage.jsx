@@ -69,7 +69,7 @@ function ExpiryBadge({ flag }) {
 }
 
 export default function RecordsPage({ me }) {
-  const toast = useToast();
+  const showToast = useToast();
   const canManage = hasPermission(me, 'records.manage');
 
   const [items, setItems] = useState([]);
@@ -110,11 +110,11 @@ export default function RecordsPage({ me }) {
         return fresh || null;
       });
     } catch (err) {
-      toast.error(err.message || 'Failed to load records');
+      showToast(err.message || 'Failed to load records', 'error');
     } finally {
       setLoading(false);
     }
-  }, [q, categoryFilter, statusFilter, expiringOnly, toast]);
+  }, [q, categoryFilter, statusFilter, expiringOnly, showToast]);
 
   useEffect(() => {
     loadRecords();
@@ -140,7 +140,7 @@ export default function RecordsPage({ me }) {
   async function handleCreate(e) {
     e.preventDefault();
     if (!newForm.title.trim()) {
-      toast.error('Title is required');
+      showToast('Title is required', 'error');
       return;
     }
     setSavingNew(true);
@@ -149,16 +149,16 @@ export default function RecordsPage({ me }) {
         method: 'POST',
         body: JSON.stringify({
           ...newForm,
-          renewal_notice_days: Number(newForm.renewal_notice_days) || 30,
+          renewal_notice_days: newForm.renewal_notice_days === '' ? 30 : Number(newForm.renewal_notice_days),
         }),
       });
-      toast.success('Record created');
+      showToast('Record created', 'ok');
       setNewForm({ ...EMPTY_FORM });
       setShowAdd(false);
       await loadRecords();
       openDetail(created);
     } catch (err) {
-      toast.error(err.message || 'Failed to create record');
+      showToast(err.message || 'Failed to create record', 'error');
     } finally {
       setSavingNew(false);
     }
@@ -173,14 +173,14 @@ export default function RecordsPage({ me }) {
         method: 'PATCH',
         body: JSON.stringify({
           ...editForm,
-          renewal_notice_days: Number(editForm.renewal_notice_days) || 30,
+          renewal_notice_days: editForm.renewal_notice_days === '' ? 30 : Number(editForm.renewal_notice_days),
         }),
       });
-      toast.success('Record updated');
+      showToast('Record updated', 'ok');
       setSelected(updated);
       await loadRecords();
     } catch (err) {
-      toast.error(err.message || 'Failed to update record');
+      showToast(err.message || 'Failed to update record', 'error');
     } finally {
       setSavingEdit(false);
     }
@@ -190,14 +190,14 @@ export default function RecordsPage({ me }) {
     if (!window.confirm(`Delete "${rec.title}" and all attached files?`)) return;
     try {
       await api(`/api/records/${rec.id}`, { method: 'DELETE' });
-      toast.success('Record deleted');
+      showToast('Record deleted', 'ok');
       if (selected?.id === rec.id) {
         setSelected(null);
         setEditForm(null);
       }
       await loadRecords();
     } catch (err) {
-      toast.error(err.message || 'Failed to delete record');
+      showToast(err.message || 'Failed to delete record', 'error');
     }
   }
 
@@ -216,10 +216,10 @@ export default function RecordsPage({ me }) {
         });
       }
       setSelected(latest);
-      toast.success('File(s) uploaded');
+      showToast('File(s) uploaded', 'ok');
       await loadRecords();
     } catch (err) {
-      toast.error(err.message || 'Failed to upload file');
+      showToast(err.message || 'Failed to upload file', 'error');
     } finally {
       setUploading(false);
     }
@@ -233,10 +233,10 @@ export default function RecordsPage({ me }) {
         method: 'DELETE',
       });
       setSelected(updated);
-      toast.success('File removed');
+      showToast('File removed', 'ok');
       await loadRecords();
     } catch (err) {
-      toast.error(err.message || 'Failed to remove file');
+      showToast(err.message || 'Failed to remove file', 'error');
     }
   }
 
@@ -260,7 +260,7 @@ export default function RecordsPage({ me }) {
         {canManage && (
           <button
             type="button"
-            className="btn btn-primary"
+            className="btn primary"
             onClick={() => setShowAdd((v) => !v)}
           >
             {showAdd ? 'Close Form' : '+ Add Record'}
@@ -286,7 +286,7 @@ export default function RecordsPage({ me }) {
           </div>
           <button
             type="button"
-            className="btn btn-sm"
+            className="btn sm"
             onClick={() => setExpiringOnly((v) => !v)}
           >
             {expiringOnly ? 'Show All Records' : 'Filter Expiring / Expired'}
@@ -414,7 +414,7 @@ export default function RecordsPage({ me }) {
             <span>Publish to public repository endpoint</span>
           </label>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button type="submit" className="btn btn-primary" disabled={savingNew}>
+            <button type="submit" className="btn primary" disabled={savingNew}>
               {savingNew ? 'Saving...' : 'Save Record'}
             </button>
             <button
@@ -543,7 +543,7 @@ export default function RecordsPage({ me }) {
               <h3 style={{ margin: 0 }}>{selected.title}</h3>
               <button
                 type="button"
-                className="btn btn-sm"
+                className="btn sm"
                 onClick={() => {
                   setSelected(null);
                   setEditForm(null);
@@ -677,12 +677,12 @@ export default function RecordsPage({ me }) {
 
               {canManage && (
                 <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between' }}>
-                  <button type="submit" className="btn btn-primary" disabled={savingEdit}>
+                  <button type="submit" className="btn primary" disabled={savingEdit}>
                     {savingEdit ? 'Saving...' : 'Save Changes'}
                   </button>
                   <button
                     type="button"
-                    className="btn btn-danger"
+                    className="btn danger"
                     onClick={() => handleDeleteRecord(selected)}
                   >
                     Delete Record
@@ -762,7 +762,7 @@ export default function RecordsPage({ me }) {
                       {canManage && (
                         <button
                           type="button"
-                          className="btn btn-sm btn-danger"
+                          className="btn sm danger"
                           onClick={() => handleDeleteFile(f.id)}
                         >
                           Remove

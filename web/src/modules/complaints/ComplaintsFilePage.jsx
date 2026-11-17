@@ -20,7 +20,7 @@ import { useToast } from '../../core/toast.jsx';
 import { ORDINANCE_PRESETS } from './constants.jsx';
 
 export default function ComplaintsFilePage({ me, onNavigate }) {
-  const toast = useToast();
+  const showToast = useToast();
 
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [isRealProperty, setIsRealProperty] = useState(true);
@@ -41,7 +41,7 @@ export default function ComplaintsFilePage({ me, onNavigate }) {
   async function handleSubmit(e) {
     e.preventDefault();
     if (!conduct.trim()) {
-      toast.error('Please describe the conduct being complained about.');
+      showToast('Please describe the conduct being complained about.', 'error');
       return;
     }
     setSubmitting(true);
@@ -76,14 +76,14 @@ export default function ComplaintsFilePage({ me, onNavigate }) {
       }
 
       setSubmittedRec(created);
-      toast.success(`Complaint ${created.complaint_number} submitted`);
+      showToast(`Complaint ${created.complaint_number} submitted`, 'ok');
       setConduct('');
       setSubjectProperty('');
       setSubjectPerson('');
       setDateObserved('');
       setFiles([]);
     } catch (err) {
-      toast.error(err.message || 'Failed to submit complaint');
+      showToast(err.message || 'Failed to submit complaint', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -115,7 +115,7 @@ export default function ComplaintsFilePage({ me, onNavigate }) {
             {!submittedRec.is_anonymous && (
               <button
                 type="button"
-                className="btn btn-sm btn-primary"
+                className="btn sm primary"
                 onClick={() => onNavigate('my-complaints')}
               >
                 Track in My Complaints
@@ -123,14 +123,14 @@ export default function ComplaintsFilePage({ me, onNavigate }) {
             )}
             <button
               type="button"
-              className="btn btn-sm"
+              className="btn sm"
               onClick={() => onNavigate('complaints-log')}
             >
               View Public Complaint Log Book
             </button>
             <button
               type="button"
-              className="btn btn-sm"
+              className="btn sm"
               onClick={() => setSubmittedRec(null)}
             >
               File Another Complaint
@@ -302,7 +302,7 @@ export default function ComplaintsFilePage({ me, onNavigate }) {
         </label>
 
         <div style={{ display: 'flex', gap: 8 }}>
-          <button type="submit" className="btn btn-primary" disabled={submitting}>
+          <button type="submit" className="btn primary" disabled={submitting}>
             {submitting ? 'Submitting...' : 'Submit Complaint (No Fee)'}
           </button>
         </div>

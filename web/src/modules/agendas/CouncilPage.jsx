@@ -93,7 +93,7 @@ export default function CouncilPage({ me }) {
           recommended_motion: motion.trim(),
           fiscal_impact: fiscal.trim(),
           target_agenda_id: targetAgendaId ? Number(targetAgendaId) : null,
-          target_date: targetDate,
+          target_date: targetDate || null,
           target_note: targetNote.trim(),
         }),
       });

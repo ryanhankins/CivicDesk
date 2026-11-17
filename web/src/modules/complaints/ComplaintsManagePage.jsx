@@ -25,7 +25,7 @@ import {
 } from './constants.jsx';
 
 export default function ComplaintsManagePage({ me }) {
-  const toast = useToast();
+  const showToast = useToast();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState('');
@@ -74,11 +74,11 @@ export default function ComplaintsManagePage({ me }) {
         return list.find((r) => r.id === prev.id) || null;
       });
     } catch (err) {
-      toast.error(err.message || 'Failed to load complaints');
+      showToast(err.message || 'Failed to load complaints', 'error');
     } finally {
       setLoading(false);
     }
-  }, [q, statusFilter, toast]);
+  }, [q, statusFilter, showToast]);
 
   useEffect(() => {
     loadAll();
@@ -108,7 +108,7 @@ export default function ComplaintsManagePage({ me }) {
         method: 'POST',
         body: JSON.stringify(oralForm),
       });
-      toast.success(`Logged ${created.complaint_number}`);
+      showToast(`Logged ${created.complaint_number}`, 'ok');
       setShowOralForm(false);
       setOralForm({
         intake_channel: 'oral',
@@ -124,7 +124,7 @@ export default function ComplaintsManagePage({ me }) {
       await loadAll();
       openCase(created);
     } catch (err) {
-      toast.error(err.message || 'Failed to log complaint');
+      showToast(err.message || 'Failed to log complaint', 'error');
     }
   }
 
@@ -138,10 +138,10 @@ export default function ComplaintsManagePage({ me }) {
         body: JSON.stringify(editForm),
       });
       setSelected(updated);
-      toast.success('Complaint updated');
+      showToast('Complaint updated', 'ok');
       await loadAll();
     } catch (err) {
-      toast.error(err.message || 'Failed to update complaint');
+      showToast(err.message || 'Failed to update complaint', 'error');
     } finally {
       setSaving(false);
     }
@@ -158,10 +158,10 @@ export default function ComplaintsManagePage({ me }) {
       setSelected(updated);
       openCase(updated);
       setShowNov(false);
-      toast.success('Notice of Violation issued');
+      showToast('Notice of Violation issued', 'ok');
       await loadAll();
     } catch (err) {
-      toast.error(err.message || 'Failed to issue Notice of Violation');
+      showToast(err.message || 'Failed to issue Notice of Violation', 'error');
     }
   }
 
@@ -182,10 +182,10 @@ export default function ComplaintsManagePage({ me }) {
         });
       }
       setSelected(latest);
-      toast.success('Document uploaded');
+      showToast('Document uploaded', 'ok');
       await loadAll();
     } catch (err) {
-      toast.error(err.message || 'Failed to upload document');
+      showToast(err.message || 'Failed to upload document', 'error');
     } finally {
       setUploading(false);
     }
@@ -195,12 +195,12 @@ export default function ComplaintsManagePage({ me }) {
     if (!window.confirm(`Delete complaint ${c.complaint_number}?`)) return;
     try {
       await api(`/api/complaints/${c.id}`, { method: 'DELETE' });
-      toast.success('Complaint deleted');
+      showToast('Complaint deleted', 'ok');
       setSelected(null);
       setEditForm(null);
       await loadAll();
     } catch (err) {
-      toast.error(err.message || 'Failed to delete complaint');
+      showToast(err.message || 'Failed to delete complaint', 'error');
     }
   }
 
@@ -215,7 +215,7 @@ export default function ComplaintsManagePage({ me }) {
         </div>
         <button
           type="button"
-          className="btn btn-primary"
+          className="btn primary"
           onClick={() => setShowOralForm((v) => !v)}
         >
           {showOralForm ? 'Close Intake Form' : '+ Log Oral / Staff Complaint'}
@@ -286,7 +286,7 @@ export default function ComplaintsManagePage({ me }) {
             />
           </label>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button type="submit" className="btn btn-primary">Save Complaint</button>
+            <button type="submit" className="btn primary">Save Complaint</button>
           </div>
         </form>
       )}
@@ -367,7 +367,7 @@ export default function ComplaintsManagePage({ me }) {
           <div className="card" style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <h3 style={{ margin: 0 }}>{selected.complaint_number}</h3>
-              <button type="button" className="btn btn-sm" onClick={() => setSelected(null)}>
+              <button type="button" className="btn sm" onClick={() => setSelected(null)}>
                 Close
               </button>
             </div>
@@ -478,7 +478,7 @@ export default function ComplaintsManagePage({ me }) {
 
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'space-between' }}>
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <button type="submit" className="btn btn-primary" disabled={saving}>
+                  <button type="submit" className="btn primary" disabled={saving}>
                     {saving ? 'Saving...' : 'Save Case'}
                   </button>
                   <button
@@ -491,7 +491,7 @@ export default function ComplaintsManagePage({ me }) {
                 </div>
                 <button
                   type="button"
-                  className="btn btn-danger"
+                  className="btn danger"
                   onClick={() => handleDeleteCase(selected)}
                 >
                   Delete
@@ -543,7 +543,7 @@ export default function ComplaintsManagePage({ me }) {
                     onChange={(e) => setNovForm({ ...novForm, required_action: e.target.value })}
                   />
                 </label>
-                <button type="submit" className="btn btn-danger">
+                <button type="submit" className="btn danger">
                   Confirm &amp; Issue Notice of Violation
                 </button>
               </form>
