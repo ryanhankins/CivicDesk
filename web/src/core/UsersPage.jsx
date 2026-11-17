@@ -16,11 +16,13 @@
 
 import React, { useCallback, useEffect, useState } from 'react';
 import { ROLE_LABELS, api, formatDate } from './api.js';
+import { InlineEditable } from './InlineEditable.jsx';
 import { useToast } from './toast.jsx';
 
 export default function UsersPage({ me, permissionsCatalog = [] }) {
   const [users, setUsers] = useState([]);
   const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [role, setRole] = useState('council_member');
   const [newPerms, setNewPerms] = useState([]);
   const [err, setErr] = useState('');
@@ -47,9 +49,10 @@ export default function UsersPage({ me, permissionsCatalog = [] }) {
     try {
       const created = await api('/api/users', {
         method: 'POST',
-        body: JSON.stringify({ username: username.trim(), role, permissions: newPerms }),
+        body: JSON.stringify({ username: username.trim(), email: email.trim(), role, permissions: newPerms }),
       });
       setUsername('');
+      setEmail('');
       setRole('council_member');
       setNewPerms([]);
       setPwBanner({ username: created.username, password: created.generated_password });
@@ -120,6 +123,16 @@ export default function UsersPage({ me, permissionsCatalog = [] }) {
             />
           </div>
           <div className="field">
+            <label htmlFor="new-email">Email (optional)</label>
+            <input
+              id="new-email"
+              type="email"
+              placeholder="e.g. jsmith@city.gov"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div className="field">
             <label htmlFor="new-role">User Type</label>
             <select id="new-role" value={role} onChange={(e) => setRole(e.target.value)}>
               <option value="council_member">Council Member</option>
@@ -160,6 +173,7 @@ export default function UsersPage({ me, permissionsCatalog = [] }) {
           <thead>
             <tr>
               <th>Username</th>
+              <th>Email</th>
               <th>User Type</th>
               <th>Module Grants</th>
               <th>Status</th>
@@ -174,6 +188,20 @@ export default function UsersPage({ me, permissionsCatalog = [] }) {
               return (
                 <tr key={u.id}>
                   <td>{u.username}</td>
+                  <td>
+                    <InlineEditable
+                      value={u.email || ''}
+                      placeholder="Add email…"
+                      title="Click to edit email"
+                      onSave={async (next) => {
+                        await api(`/api/users/${u.id}`, {
+                          method: 'PATCH',
+                          body: JSON.stringify({ email: next }),
+                        });
+                        await loadUsers();
+                      }}
+                    />
+                  </td>
                   <td>
                     {u.role === 'admin' ? (
                       ROLE_LABELS.admin
