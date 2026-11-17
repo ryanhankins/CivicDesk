@@ -240,7 +240,12 @@ export default function CoreShell() {
   return (
     <>
       <header>
-        <div className="brand" style={{ display: 'flex', alignItems: 'center', gap: '.55rem' }}>
+        <a
+          href="/"
+          className="brand"
+          style={{ display: 'flex', alignItems: 'center', gap: '.55rem', textDecoration: 'none', color: 'inherit' }}
+          title="Go to main page"
+        >
           {branding.hasLogo && (
             <img
               id="brand-logo"
@@ -252,7 +257,7 @@ export default function CoreShell() {
           )}
           {branding.cityTitle && <span id="brand-city-title">{branding.cityTitle}</span>}
           <span>CivicDesk</span>
-        </div>
+        </a>
         <div className="user-bar">
           <span id="whoami">
             {me ? `${me.username} (${ROLE_LABELS[me.role] || me.role})` : ''}
