@@ -17,7 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import { api, formatDate, formatSize } from '../../core/api.js';
 import { useToast } from '../../core/toast.jsx';
-import { permitStatusBadge } from './MyPermitsPage.jsx';
+import { permitExpiryInfo, permitStatusBadge } from './MyPermitsPage.jsx';
 
 export default function PermitDetailWorkspace({ permit, isManager = false, onUpdated, onBack }) {
   const [tab, setTab] = useState('overview');
@@ -25,6 +25,7 @@ export default function PermitDetailWorkspace({ permit, isManager = false, onUpd
   const [fee, setFee] = useState(permit.fee_amount || '');
   const [payStatus, setPayStatus] = useState(permit.payment_status || 'unpaid');
   const [assignedTo, setAssignedTo] = useState(permit.assigned_to || '');
+  const [expiresAt, setExpiresAt] = useState(permit.expires_at || '');
   const [notes, setNotes] = useState(permit.review_notes || '');
 
   // Workflow form
@@ -52,6 +53,7 @@ export default function PermitDetailWorkspace({ permit, isManager = false, onUpd
     setFee(permit.fee_amount || '');
     setPayStatus(permit.payment_status || 'unpaid');
     setAssignedTo(permit.assigned_to || '');
+    setExpiresAt(permit.expires_at || '');
     setNotes(permit.review_notes || '');
   }, [permit]);
 
@@ -131,6 +133,7 @@ export default function PermitDetailWorkspace({ permit, isManager = false, onUpd
                           fee_amount: fee.trim(),
                           payment_status: payStatus,
                           assigned_to: assignedTo.trim(),
+                          expires_at: expiresAt,
                           review_notes: notes.trim(),
                         }),
                       });
@@ -175,6 +178,12 @@ export default function PermitDetailWorkspace({ permit, isManager = false, onUpd
                       </select>
                     </div>
                   </div>
+                  <div className="row" style={{ marginBottom: '.6rem' }}>
+                    <div className="field" style={{ flex: 1 }}>
+                      <label>Expiration Date (optional)</label>
+                      <input type="date" value={expiresAt} onChange={(e) => setExpiresAt(e.target.value)} />
+                    </div>
+                  </div>
                   <div className="field" style={{ marginBottom: '.65rem' }}>
                     <label>Review Notes (visible to applicant)</label>
                     <textarea rows={3} value={notes} onChange={(e) => setNotes(e.target.value)} />
@@ -186,6 +195,17 @@ export default function PermitDetailWorkspace({ permit, isManager = false, onUpd
                   <div><strong>Status:</strong> {permit.status.replace('_', ' ')}</div>
                   <div><strong>Fee:</strong> {permit.fee_amount || 'TBD'} ({permit.payment_status})</div>
                   <div><strong>Assigned Reviewer:</strong> {permit.assigned_to || 'Unassigned'}</div>
+                  {permit.expires_at && (() => {
+                    const exp = permitExpiryInfo(permit.expires_at);
+                    return (
+                      <div>
+                        <strong>Expires:</strong>{' '}
+                        {exp && exp.cls !== 'muted'
+                          ? <span className={exp.cls}>{exp.label}</span>
+                          : permit.expires_at}
+                      </div>
+                    );
+                  })()}
                   {permit.review_notes && (
                     <div style={{ marginTop: '.5rem', padding: '.5rem .65rem', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: '6px' }}>
                       <strong>Staff Notes:</strong> {permit.review_notes}
