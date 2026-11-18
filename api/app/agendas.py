@@ -1650,7 +1650,9 @@ def list_council_submissions(user: dict = Depends(get_council_or_staff_user)):
 
 @router.post("/council/submissions", status_code=201)
 def create_council_submission(
-    body: CouncilSubmissionIn, user: dict = Depends(get_council_or_staff_user)
+    body: CouncilSubmissionIn,
+    request: Request,
+    user: dict = Depends(get_council_or_staff_user),
 ):
     """Submit a pending agenda item from a council member."""
     title = body.title.strip()
@@ -1688,6 +1690,8 @@ def create_council_submission(
         "agendas_council_submission",
         f"[CivicDesk] New Council Submission: {title}",
         f"{user['username']} submitted a proposed agenda item: {title}.",
+        link_path="/app#council",
+        request=request,
     )
     return {
         "id": row[0],
@@ -2053,7 +2057,7 @@ def get_agenda(agenda_id: int, _: dict = Depends(get_staff_user)):
 
 
 @router.patch("/{agenda_id}")
-def update_agenda(agenda_id: int, body: AgendaPatch, user: dict = Depends(get_staff_user)):
+def update_agenda(agenda_id: int, body: AgendaPatch, request: Request, user: dict = Depends(get_staff_user)):
     with pool.connection() as conn:
         prev = conn.execute(
             "SELECT status FROM agendas WHERE id = %s", (agenda_id,)
@@ -2121,6 +2125,8 @@ def update_agenda(agenda_id: int, body: AgendaPatch, user: dict = Depends(get_st
             "agendas_finalized",
             f"[CivicDesk] Agenda Finalized: {loaded['title']}",
             f"Agenda '{loaded['title']}' ({loaded['body']}, {loaded['meeting_date']}) was finalized by {user['username']}.",
+            link_path=f"/app#agendas/{agenda_id}",
+            request=request,
         )
     return loaded
 

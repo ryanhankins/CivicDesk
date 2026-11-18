@@ -46,7 +46,11 @@ const permitsModule = {
       component: MyPermitsPage,
     },
     {
-      match: (hash) => (hash === 'permits-review' ? {} : null),
+      match: (hash) => {
+        if (hash === 'permits-review') return {};
+        const m = hash.match(/^permits-review\/(\d+)$/);
+        return m ? { initialId: Number(m[1]) } : null;
+      },
       permission: 'permits.manage',
       component: PermitsReviewPage,
     },
