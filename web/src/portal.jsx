@@ -18,6 +18,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../app.css';
 import ServiceIcon from './core/ServiceIcon.jsx';
+import { PublicFooter, UrgentAlertBanner } from './core/PublicChrome.jsx';
 
 function PublicPermitsPortal() {
   const [branding, setBranding] = useState({ city_title: '', has_city_logo: false });
@@ -70,6 +71,7 @@ function PublicPermitsPortal() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#f5f7fa' }}>
       <a className="skip-link" href="#portal-main">Skip To Main Content</a>
+      <UrgentAlertBanner branding={branding} />
       <header>
         <a
           href="/"
@@ -200,6 +202,7 @@ function PublicPermitsPortal() {
           )}
         </div>
       </main>
+      <PublicFooter branding={branding} />
     </div>
   );
 }
