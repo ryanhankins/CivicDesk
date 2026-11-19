@@ -14,6 +14,7 @@
 
 """Public citizen email subscriptions and alerts across enabled public modules."""
 import re
+import contextvars
 import secrets
 import threading
 from html import escape as _html_escape
@@ -130,7 +131,8 @@ def notify_topic_subscribers(
             except Exception:
                 pass
 
-    threading.Thread(target=_worker, daemon=True).start()
+    ctx = contextvars.copy_context()
+    threading.Thread(target=ctx.run, args=(_worker,), daemon=True).start()
 
 
 class SubscribeIn(BaseModel):
@@ -192,7 +194,8 @@ def subscribe(body: SubscribeIn, request: Request):
             except Exception:
                 pass
 
-        threading.Thread(target=_confirm, daemon=True).start()
+        ctx = contextvars.copy_context()
+        threading.Thread(target=ctx.run, args=(_confirm,), daemon=True).start()
 
     return {
         "email": email,
