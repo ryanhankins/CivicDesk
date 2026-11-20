@@ -62,6 +62,9 @@ MODULE = CivicModule(
     permissions=[
         {"key": "directory.manage", "label": "Manage Staff/Council Directory & Public FAQs"},
     ],
+    features=[
+        {"key": "resources", "label": "Community Resources & Local Businesses", "description": "Directory of local businesses, nonprofits, utilities, and schools.", "default": True},
+    ],
     nav_groups=[
         {
             "id": "directory-staff",

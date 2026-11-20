@@ -119,6 +119,10 @@ MODULE = CivicModule(
         {"key": "agendas.manage", "label": "Manage Agendas, Backlog & Agenda Preferences"},
         {"key": "agendas.submit", "label": "Submit Agenda Items & View Finalized Agendas"},
     ],
+    features=[
+        {"key": "backlog", "label": "Todos & Action Item Backlog", "description": "Track recurring agenda items and post-meeting action items.", "default": True},
+        {"key": "council_submissions", "label": "Council Member Item Proposals", "description": "Allow council/board members to submit agenda items for clerk review.", "default": True},
+    ],
     nav_groups=[
         {
             "id": "agenda-management",
@@ -127,7 +131,7 @@ MODULE = CivicModule(
             "permission": "agendas.manage",
             "items": [
                 {"section": "agendas", "label": "Manage Agendas", "permission": "agendas.manage"},
-                {"section": "backlog", "label": "Todos & Backlog", "permission": "agendas.manage", "badge": "backlog"},
+                {"section": "backlog", "label": "Todos & Backlog", "permission": "agendas.manage", "badge": "backlog", "feature": "backlog"},
                 {"section": "preferences-agenda", "label": "Agenda Preferences", "permission": "agendas.manage"},
             ],
         },
@@ -138,7 +142,7 @@ MODULE = CivicModule(
             "permission": "agendas.submit",
             "items": [
                 {"section": "finalized-agendas", "label": "Finalized Agendas", "permission": "agendas.submit"},
-                {"section": "council", "label": "Propose Agenda Item", "permission": "agendas.submit"},
+                {"section": "council", "label": "Propose Agenda Item", "permission": "agendas.submit", "feature": "council_submissions"},
             ],
         },
     ],
