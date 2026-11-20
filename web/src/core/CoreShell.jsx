@@ -30,6 +30,7 @@ const GeneralPrefsPage = React.lazy(() => import('./GeneralPrefsPage.jsx'));
 const BackupRestorePage = React.lazy(() => import('./BackupRestorePage.jsx'));
 const HelpDocsPage = React.lazy(() => import('./HelpDocsPage.jsx'));
 const MyAccountPage = React.lazy(() => import('./MyAccountPage.jsx'));
+const BillingManagePage = React.lazy(() => import('./BillingManagePage.jsx'));
 
 export default function CoreShell() {
   const [me, setMe] = useState(null);
@@ -184,7 +185,7 @@ export default function CoreShell() {
     if (hash === 'calendar-manage' || hash === 'preferences-calendar') {
       setOpenSubmenus(prev => (prev['calendar-staff'] ? prev : { ...prev, 'calendar-staff': true }));
     }
-    if (['users', 'modules', 'preferences-general', 'integrations', 'audit', 'preferences-backup'].includes(hash)) {
+    if (['users', 'modules', 'preferences-general', 'integrations', 'audit', 'preferences-backup', 'billing'].includes(hash)) {
       setOpenSubmenus(prev => (prev['admin-section'] ? prev : { ...prev, 'admin-section': true }));
     }
   }, [hash]);
@@ -238,6 +239,13 @@ export default function CoreShell() {
         component: MyAccountPage,
         props: { me, onNavigate: navigate },
         activeSection: 'my-account',
+      };
+    }
+    if (hash === 'billing' && canManageSettings) {
+      return {
+        component: BillingManagePage,
+        props: {},
+        activeSection: 'billing',
       };
     }
     for (const mod of Object.values(frontendMods)) {
@@ -527,6 +535,15 @@ export default function CoreShell() {
                         onClick={() => navigate('#audit')}
                       >
                         Audit Log
+                      </button>
+                    )}
+                    {canManageSettings && (
+                      <button
+                        type="button"
+                        className={activeSection === 'billing' ? 'active' : ''}
+                        onClick={() => navigate('#billing')}
+                      >
+                        Utility Bills &amp; Citations
                       </button>
                     )}
                     {canManageSettings && (
