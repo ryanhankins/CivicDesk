@@ -847,8 +847,11 @@ export default function ComplaintsManagePage({ me, initialId = null }) {
               </form>
             )}
 
-            <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10, display: 'grid', gap: 8 }}>
-              <strong>Field Inspections &amp; Reinspections ({(selected.reinspections || []).length})</strong>
+            <details open={(selected.reinspections || []).length > 0} style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10 }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 13, marginBottom: 8 }}>
+                Field Inspections &amp; Reinspections ({(selected.reinspections || []).length})
+              </summary>
+              <div style={{ display: 'grid', gap: 8 }}>
               <form
                 style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}
                 onSubmit={async (e) => {
@@ -928,10 +931,14 @@ export default function ComplaintsManagePage({ me, initialId = null }) {
                   ))}
                 </div>
               )}
-            </div>
+              </div>
+            </details>
 
-            <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10, display: 'grid', gap: 8 }}>
-              <strong>Attachments</strong>
+            <details open={(selected.documents || []).length > 0} style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10 }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 13, marginBottom: 8 }}>
+                Attachments ({(selected.documents || []).length})
+              </summary>
+              <div style={{ display: 'grid', gap: 8 }}>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                 <select
                   className="input"
@@ -979,10 +986,14 @@ export default function ComplaintsManagePage({ me, initialId = null }) {
                   )}
                 </div>
               ))}
-            </div>
+              </div>
+            </details>
 
-            <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10, display: 'grid', gap: 8 }}>
-              <strong style={{ fontSize: 13 }}>Messages &amp; Resident Updates ({(selected.messages || []).length})</strong>
+            <details open={(selected.messages || []).length > 0} style={{ borderTop: '1px solid #e5e7eb', paddingTop: 10 }}>
+              <summary style={{ cursor: 'pointer', fontWeight: 700, fontSize: 13, marginBottom: 8 }}>
+                Messages &amp; Resident Updates ({(selected.messages || []).length})
+              </summary>
+              <div style={{ display: 'grid', gap: 8 }}>
               {(selected.messages || []).map((m) => (
                 <div
                   key={m.id}
@@ -1045,7 +1056,8 @@ export default function ComplaintsManagePage({ me, initialId = null }) {
                   </button>
                 </div>
               </form>
-            </div>
+              </div>
+            </details>
           </div>
         )}
       </div>
