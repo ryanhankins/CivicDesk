@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 CivicDesk Contributors
+ * Copyright 2026 DocketHall Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ export function PublicFooter({ branding }) {
         }}
       >
         <div style={{ whiteSpace: 'pre-wrap' }}>
-          {footerText || (branding?.city_title ? `${branding.city_title} Public Portal` : 'CivicDesk Public Portal')}
+          {footerText || (branding?.city_title ? `${branding.city_title} Public Portal` : 'DocketHall Public Portal')}
         </div>
         {hasSite && (
           <a
@@ -126,10 +126,10 @@ export function DirectoryHeaderLink({ branding }) {
   );
 }
 
-export function CivicDeskLogo({ size = 24 }) {
+export function DocketHallLogo({ size = 24 }) {
   return (
     <img
-      src="/civicdesk-logo.svg"
+      src="/dockethall-logo.svg"
       alt=""
       width={size}
       height={size}

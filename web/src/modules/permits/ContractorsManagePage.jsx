@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 CivicDesk Contributors
+ * Copyright 2026 DocketHall Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

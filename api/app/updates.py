@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ def _fetch_github_commits(repo: str) -> tuple[list[dict], str]:
         url,
         headers={
             "Accept": "application/vnd.github+json",
-            "User-Agent": "CivicDesk-Updater",
+            "User-Agent": "DocketHall-Updater",
         },
     )
     try:
@@ -146,7 +146,7 @@ def trigger_system_upgrade(user: dict = Depends(require_admin)):
     with open(os.path.join(UPGRADE_DIR, "request.json"), "w", encoding="utf-8") as f:
         json.dump(req_payload, f)
     try:
-        record_audit(user.get("username", "admin"), "system.upgrade_requested", "Requested in-app CivicDesk upgrade")
+        record_audit(user.get("username", "admin"), "system.upgrade_requested", "Requested in-app DocketHall upgrade")
     except Exception:
         pass
     return {"queued": True, "upgrade_status": status_payload}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2026 CivicDesk Contributors
+ * Copyright 2026 DocketHall Contributors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ import '../app.css';
 import { ROLE_LABELS, formatDate, formatSize, formatTime12h } from './core/api.js';
 import ServiceIcon from './core/ServiceIcon.jsx';
 import CustomFieldsRenderer from './core/CustomFieldsRenderer.jsx';
-import { CivicDeskLogo, DirectoryHeaderLink, PublicFooter, UrgentAlertBanner } from './core/PublicChrome.jsx';
+import { DocketHallLogo, DirectoryHeaderLink, PublicFooter, UrgentAlertBanner } from './core/PublicChrome.jsx';
 import { applyTheme } from './core/theme.js';
 import { HighlightText, LinkedCodeBody, buildSectionMap, getSearchSnippet } from './modules/codification/codeHelpers.jsx';
 import { COMPLAINT_STATUSES, ORDINANCE_PRESETS, StatusBadge } from './modules/complaints/constants.jsx';
@@ -968,7 +968,7 @@ function AuthModal({ open, initialRegister, initialResetToken, nextUrl, reason, 
         ? 'Reset Your Password'
         : mode === 'reset'
           ? 'Choose a New Password'
-          : 'Sign In to CivicDesk';
+          : 'Sign In to DocketHall';
 
   return (
     <dialog ref={dlgRef} onCancel={(e) => { e.preventDefault(); onClose(); }} style={{ maxWidth: 400, width: '92%' }}>
@@ -2676,7 +2676,7 @@ function PublicHomePage() {
   const [publicFeatures, setPublicFeatures] = useState({});
   const [showAllServices, setShowAllServices] = useState(() => {
     try {
-      return localStorage.getItem('civicdesk.showAllServices') === 'true';
+      return localStorage.getItem('dockethall.showAllServices') === 'true';
     } catch {
       return false;
     }
@@ -2699,7 +2699,7 @@ function PublicHomePage() {
         setBranding(b || {});
         applyTheme(b || {});
         const title = (b?.city_title || '').trim();
-        document.title = title ? `${title} - CivicDesk` : 'CivicDesk — Public Portal';
+        document.title = title ? `${title} - DocketHall` : 'DocketHall — Public Portal';
       })
       .catch(() => {});
 
@@ -2780,8 +2780,8 @@ function PublicHomePage() {
           )}
           {branding.city_title && <span>{branding.city_title}</span>}
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: '.35rem' }}>
-            <CivicDeskLogo size={24} />
-            <span>CivicDesk</span>
+            <DocketHallLogo size={24} />
+            <span>DocketHall</span>
           </span>
         </a>
         <div className="user-bar">
@@ -2897,7 +2897,7 @@ function PublicHomePage() {
                   onClick={() => {
                     const next = !showAllServices;
                     setShowAllServices(next);
-                    try { localStorage.setItem('civicdesk.showAllServices', String(next)); } catch { /* ignore */ }
+                    try { localStorage.setItem('dockethall.showAllServices', String(next)); } catch { /* ignore */ }
                   }}
                 >
                   {showAllServices ? 'Show Fewer Services ▴' : `Show All City Services (${visibleTabs.length}) ▾`}

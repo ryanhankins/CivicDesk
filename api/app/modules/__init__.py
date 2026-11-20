@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Available CivicDesk feature modules."""
+"""Available DocketHall feature modules."""
 from .agendas_module import MODULE as AGENDAS_MODULE
 from .calendar_module import MODULE as CALENDAR_MODULE
 from .codification_module import MODULE as CODIFICATION_MODULE

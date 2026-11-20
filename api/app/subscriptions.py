@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -184,7 +184,7 @@ def subscribe(body: SubscribeIn, request: Request):
         base = get_app_base_url(request)
         smtp_host, smtp_port, sender, app_pw = smtp
         lines = [
-            f"You are now subscribed to CivicDesk public email alerts ({base}):",
+            f"You are now subscribed to DocketHall public email alerts ({base}):",
             "",
         ]
         for t, tok in tokens_by_topic:
@@ -195,7 +195,7 @@ def subscribe(body: SubscribeIn, request: Request):
             try:
                 _send_smtp_mail(
                     smtp_host, smtp_port, sender, app_pw, [email],
-                    "[CivicDesk] Public Email Alert Subscription Confirmed",
+                    "[DocketHall] Public Email Alert Subscription Confirmed",
                     msg_body,
                 )
             except Exception:
@@ -223,7 +223,7 @@ def unsubscribe(token: str = Query(..., min_length=8)):
         return HTMLResponse(
             "<!doctype html><html><body style='font-family:sans-serif;max-width:520px;margin:3rem auto;padding:1rem;'>"
             "<h2>Subscription Not Found</h2><p>This unsubscribe link is invalid or already removed.</p>"
-            "<p><a href='/'>Return to CivicDesk</a></p></body></html>",
+            "<p><a href='/'>Return to DocketHall</a></p></body></html>",
             status_code=404,
         )
     label = _TOPIC_LABELS.get(row[1], row[1])
@@ -231,7 +231,7 @@ def unsubscribe(token: str = Query(..., min_length=8)):
         "<!doctype html><html><body style='font-family:sans-serif;max-width:520px;margin:3rem auto;padding:1rem;'>"
         f"<h2>Unsubscribed</h2><p><strong>{_html_escape(row[0])}</strong> has been unsubscribed from "
         f"<strong>{_html_escape(label)}</strong> alerts.</p>"
-        "<p><a href='/'>Return to CivicDesk Public Portal</a></p></body></html>"
+        "<p><a href='/'>Return to DocketHall Public Portal</a></p></body></html>"
     )
 
 

@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -423,7 +423,7 @@ def send_notification_email(
     if link_path:
         base = get_app_base_url(request)
         path = link_path if link_path.startswith("/") else f"/{link_path}"
-        body = f"{body}\n\nOpen in CivicDesk (login required if not signed in): {base}{path}"
+        body = f"{body}\n\nOpen in DocketHall (login required if not signed in): {base}{path}"
     try:
         with pool.connection() as conn:
             row = conn.execute(
@@ -470,7 +470,7 @@ def send_direct_email(
     if link_path:
         base = get_app_base_url(request)
         path = link_path if link_path.startswith("/") else f"/{link_path}"
-        body = f"{body}\n\nOpen in CivicDesk (login required if not signed in): {base}{path}"
+        body = f"{body}\n\nOpen in DocketHall (login required if not signed in): {base}{path}"
     try:
         with pool.connection() as conn:
             row = conn.execute(
@@ -594,8 +594,8 @@ def test_email_config(body: EmailTestIn, admin: dict = Depends(require_admin)):
             sender,
             app_pw,
             recipients,
-            "CivicDesk Test Notification",
-            "This is a test email from CivicDesk confirming your outgoing SMTP notification settings work.",
+            "DocketHall Test Notification",
+            "This is a test email from DocketHall confirming your outgoing SMTP notification settings work.",
         )
         msg = f"Test email sent to {', '.join(recipients)}."
         with pool.connection() as conn:

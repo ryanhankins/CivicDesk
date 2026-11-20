@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -433,7 +433,7 @@ def submit_public_form(form_id: int, body: FormSubmitIn, request: Request):
 
     send_notification_email(
         "forms_submitted",
-        f"[CivicDesk] New Submission: {f_row[2]}",
+        f"[DocketHall] New Submission: {f_row[2]}",
         f"A new response was submitted for '{f_row[2]}' by {sname or 'Anonymous'}.",
         link_path="/app#forms-manage",
         request=request,

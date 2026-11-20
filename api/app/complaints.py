@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -627,10 +627,10 @@ def _create_complaint_row(
             act = _fetch_activity(conn, cid, include_internal=False)
     send_notification_email(
         "complaints_submitted",
-        f"[CivicDesk] New Complaint {cnum}",
+        f"[DocketHall] New Complaint {cnum}",
         f"Complaint {cnum} ({'anonymous' if is_anon else channel}) was filed"
         + (f" regarding {body.subject_property_address.strip()}" if body.subject_property_address.strip() else "")
-        + ".\n\n(Complainant identity is kept confidential in CivicDesk per applicable public-records law.)",
+        + ".\n\n(Complainant identity is kept confidential in DocketHall per applicable public-records law.)",
         link_path=f"/app#complaints-manage/{cid}",
         request=request,
     )
@@ -1404,7 +1404,7 @@ def issue_notice_of_violation(
     )
     send_notification_email(
         "complaints_escalated",
-        f"[CivicDesk] Notice of Violation Issued: {res['complaint_number']}",
+        f"[DocketHall] Notice of Violation Issued: {res['complaint_number']}",
         f"A Notice of Violation was issued for complaint {res['complaint_number']} by {official}. Compliance deadline: {deadline_str}.",
         link_path=f"/app#complaints-manage/{complaint_id}",
         request=request,
@@ -1599,7 +1599,7 @@ def post_complaint_message(
 
         send_direct_email(
             [recipient_email],
-            f"[CivicDesk] Update on Complaint {row[1]}",
+            f"[DocketHall] Update on Complaint {row[1]}",
             f"City staff posted an update regarding complaint {row[1]}:\n\n{text}",
             link_path="/app#my-complaints" if row[5] else "/#complaints",
             request=request,
@@ -1607,7 +1607,7 @@ def post_complaint_message(
     elif not is_mgr:
         send_notification_email(
             "complaints_submitted",
-            f"[CivicDesk] Resident Reply on Complaint {row[1]}",
+            f"[DocketHall] Resident Reply on Complaint {row[1]}",
             f"The complainant posted a reply on complaint {row[1]}:\n\n{text}",
             link_path=f"/app#complaints-manage/{complaint_id}",
             request=request,

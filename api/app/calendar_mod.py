@@ -1,4 +1,4 @@
-# Copyright 2026 CivicDesk Contributors
+# Copyright 2026 DocketHall Contributors
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -426,7 +426,7 @@ def download_event_ics(kind: Literal["meeting", "event"], item_id: int):
     ics = "\r\n".join([
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        "PRODID:-//CivicDesk//City Calendar//EN",
+        "PRODID:-//DocketHall//City Calendar//EN",
         "BEGIN:VEVENT",
         f"UID:{kind}-{item_id}@civicdesk",
         f"DTSTAMP:{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
@@ -542,7 +542,7 @@ def create_public_reservation(body: PublicReservationIn, request: Request):
     when_desc = f"{ev_date.isoformat()} ({start_time}–{end_time})" if rental_mode == "hourly" else f"{ev_date.isoformat()} (Full Day / 24hrs)"
     send_notification_email(
         "calendar_reservation_requested",
-        f"[CivicDesk] New Facility Reservation Request {final_num}: {fac[1]}",
+        f"[DocketHall] New Facility Reservation Request {final_num}: {fac[1]}",
         f"{name} requested to reserve {fac[1]} on {when_desc} (Fee: {fee_str}).",
         link_path="/app#calendar-manage",
         request=request,
@@ -550,7 +550,7 @@ def create_public_reservation(body: PublicReservationIn, request: Request):
     if res["requester_email"]:
         send_direct_email(
             [res["requester_email"]],
-            f"[CivicDesk] Reservation Request Received: {final_num}",
+            f"[DocketHall] Reservation Request Received: {final_num}",
             f"We received your request ({final_num}) to reserve {fac[1]} on {when_desc} (Fee: {fee_str}). "
             f"City staff will review and confirm your reservation.",
             link_path="/#calendar",
@@ -696,7 +696,7 @@ def update_reservation(
     if body.status and body.status != cur["status"] and updated["requester_email"]:
         send_direct_email(
             [updated["requester_email"]],
-            f"[CivicDesk] Reservation {updated['reservation_number']} {updated['status'].title()}",
+            f"[DocketHall] Reservation {updated['reservation_number']} {updated['status'].title()}",
             f"Your reservation ({updated['reservation_number']}) for {updated['facility_name']} on {updated['event_date']} "
             f"has been marked '{updated['status']}'.\nFee: {updated['fee_amount']} ({updated['payment_status']})"
             + (f"\nNote: {updated['staff_notes']}" if updated["staff_notes"] else ""),
