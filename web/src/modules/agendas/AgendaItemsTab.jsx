@@ -17,6 +17,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { api, formatSize } from '../../core/api.js';
 import { InlineEditable } from '../../core/InlineEditable.jsx';
+import PdfComplianceButton from '../../core/PdfComplianceButton.jsx';
 import { useToast } from '../../core/toast.jsx';
 import { CreateTodoModal } from './BacklogPage.jsx';
 
@@ -449,6 +450,7 @@ function ItemCard({
                   </div>
                   <div className="actions">
                     <a className="btn sm" href={`/api/agendas/${agenda.id}/documents/${d.id}/pdf`} target="_blank" rel="noreferrer">View PDF</a>
+                    <PdfComplianceButton url={`/api/agendas/${agenda.id}/documents/${d.id}/compliance`} title={d.title || d.filename} label="Check PDF" />
                     {d.doc_type !== 'PDF' && (
                       <a className="btn sm" href={`/api/agendas/${agenda.id}/documents/${d.id}/download`} target="_blank" rel="noreferrer">Original</a>
                     )}
