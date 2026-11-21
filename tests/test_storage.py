@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Unit tests for LocalStorageClient (optional MinIO replacement)."""
+"""Unit tests for LocalStorageClient (local filesystem storage backend)."""
 import io
 import os
 import sys
@@ -31,7 +31,7 @@ except ImportError:
     HAS_STORAGE_DEPS = False
 
 
-@unittest.skipUnless(HAS_STORAGE_DEPS, "API dependencies (minio/psycopg) not installed")
+@unittest.skipUnless(HAS_STORAGE_DEPS, "storage module dependencies not installed")
 class LocalStorageTest(unittest.TestCase):
     def test_put_get_copy_remove_and_path_safety(self):
         with tempfile.TemporaryDirectory() as tmpdir:
